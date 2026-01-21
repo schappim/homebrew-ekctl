@@ -1,8 +1,8 @@
 class Ekctl < Formula
   desc "macOS CLI tool for managing Calendar events and Reminders via EventKit"
   homepage "https://github.com/schappim/ekctl"
-  url "https://github.com/schappim/ekctl/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "9e903bd8d20e82b1a17892d215ceb0493f634d2d0be4ad97708f753e4018b34d"
+  url "https://github.com/schappim/ekctl/archive/refs/tags/v1.1.0.tar.gz"
+  sha256 "3a6057ca0fd4f7c0d682852740d707f42b686b1e964c157fff80b4c64e359866"
   license "MIT"
   head "https://github.com/schappim/ekctl.git", branch: "main"
 
@@ -22,21 +22,25 @@ class Ekctl < Formula
         System Settings → Privacy & Security → Reminders
 
       Quick start:
-        # List all calendars
+        # List all calendars and get their IDs
         ekctl list calendars
 
-        # List events in a calendar
-        ekctl list events --calendar <calendar_id> --from 2026-01-01T00:00:00Z --to 2026-01-31T23:59:59Z
+        # Set up aliases for easier use
+        ekctl alias set work "YOUR_CALENDAR_ID"
+        ekctl alias set personal "YOUR_REMINDERS_ID"
 
-        # Add an event
-        ekctl add event --calendar <calendar_id> --title "Meeting" --start 2026-01-15T09:00:00Z --end 2026-01-15T10:00:00Z
+        # Use aliases in commands
+        ekctl list events --calendar work --from 2026-01-01T00:00:00Z --to 2026-01-31T23:59:59Z
+        ekctl add event --calendar work --title "Meeting" --start 2026-01-15T09:00:00Z --end 2026-01-15T10:00:00Z
+        ekctl add reminder --list personal --title "Call mom"
 
       For more examples, see: https://github.com/schappim/ekctl#usage
     EOS
   end
 
   test do
-    assert_match "1.0.0", shell_output("#{bin}/ekctl --version")
+    assert_match "1.1.0", shell_output("#{bin}/ekctl --version")
     assert_match "calendars", shell_output("#{bin}/ekctl list --help")
+    assert_match "alias", shell_output("#{bin}/ekctl --help")
   end
 end

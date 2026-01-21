@@ -12,31 +12,53 @@ brew tap schappim/ekctl
 brew install ekctl
 ```
 
+## Quick Start
+
+```bash
+# List all calendars and get their IDs
+ekctl list calendars
+
+# Set up aliases for easier use (recommended)
+ekctl alias set work "YOUR_CALENDAR_ID"
+ekctl alias set personal "YOUR_REMINDERS_ID"
+ekctl alias set groceries "YOUR_GROCERY_LIST_ID"
+
+# Now use friendly names instead of long IDs!
+ekctl list events --calendar work --from "2026-01-01T00:00:00Z" --to "2026-01-31T23:59:59Z"
+ekctl add event --calendar work --title "Team Meeting" --start "2026-01-15T09:00:00Z" --end "2026-01-15T10:00:00Z"
+ekctl add reminder --list groceries --title "Buy milk"
+```
+
 ## Usage
 
 ```bash
 # List all calendars and reminder lists
 ekctl list calendars
 
-# List events in a date range
+# Manage aliases
+ekctl alias set work "CA513B39-1659-4359-8FE9-0C2A3DCEF153"
+ekctl alias list
+ekctl alias remove work
+
+# List events (using alias or ID)
 ekctl list events \
-  --calendar "YOUR_CALENDAR_ID" \
+  --calendar work \
   --from "2026-01-01T00:00:00Z" \
   --to "2026-01-31T23:59:59Z"
 
 # Add an event
 ekctl add event \
-  --calendar "YOUR_CALENDAR_ID" \
+  --calendar work \
   --title "Team Meeting" \
   --start "2026-01-15T09:00:00Z" \
   --end "2026-01-15T10:00:00Z"
 
 # List incomplete reminders
-ekctl list reminders --list "YOUR_LIST_ID" --completed false
+ekctl list reminders --list personal --completed false
 
 # Add a reminder with due date
 ekctl add reminder \
-  --list "YOUR_LIST_ID" \
+  --list personal \
   --title "Call dentist" \
   --due "2026-01-20T09:00:00Z"
 
