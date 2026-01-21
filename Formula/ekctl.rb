@@ -1,8 +1,8 @@
 class Ekctl < Formula
   desc "macOS CLI tool for managing Calendar events and Reminders via EventKit"
   homepage "https://github.com/schappim/ekctl"
-  url "https://github.com/schappim/ekctl/archive/refs/tags/v1.1.0.tar.gz"
-  sha256 "3a6057ca0fd4f7c0d682852740d707f42b686b1e964c157fff80b4c64e359866"
+  url "https://github.com/schappim/ekctl/archive/refs/tags/v1.2.0.tar.gz"
+  sha256 "593d6ba765e2db665f368479c7ca0d2697a2f955f7de22697f46884bb866f3fb"
   license "MIT"
   head "https://github.com/schappim/ekctl.git", branch: "main"
 
@@ -39,7 +39,7 @@ class Ekctl < Formula
   end
 
   test do
-    assert_match "1.1.0", shell_output("#{bin}/ekctl --version")
+    assert_match "1.2.0", shell_output("#{bin}/ekctl --version")
     assert_match "calendars", shell_output("#{bin}/ekctl list --help")
     assert_match "alias", shell_output("#{bin}/ekctl --help")
   end
