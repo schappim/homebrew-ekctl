@@ -1,8 +1,8 @@
 class Ekctl < Formula
   desc "macOS CLI tool for managing Calendar events and Reminders via EventKit"
   homepage "https://github.com/schappim/ekctl"
-  url "https://github.com/schappim/ekctl/archive/refs/tags/v1.2.0.tar.gz"
-  sha256 "593d6ba765e2db665f368479c7ca0d2697a2f955f7de22697f46884bb866f3fb"
+  url "https://github.com/schappim/ekctl/archive/refs/tags/v1.4.0.tar.gz"
+  sha256 "ed779b92042b6b11b0e55cfbcfab317f49ecf5af9e56439c6ad1de454735a815"
   license "MIT"
   head "https://github.com/schappim/ekctl.git", branch: "main"
 
@@ -22,16 +22,24 @@ class Ekctl < Formula
         System Settings → Privacy & Security → Reminders
 
       Quick start:
-        # List all calendars and get their IDs
+        # See what calendars and reminder lists you have
         ekctl list calendars
 
-        # Set up aliases for easier use
+        # Set up aliases so you don't have to paste UUIDs everywhere
         ekctl alias set work "YOUR_CALENDAR_ID"
         ekctl alias set personal "YOUR_REMINDERS_ID"
 
-        # Use aliases in commands
-        ekctl list events --calendar work --from 2026-01-01T00:00:00Z --to 2026-01-31T23:59:59Z
-        ekctl add event --calendar work --title "Meeting" --start 2026-01-15T09:00:00Z --end 2026-01-15T10:00:00Z
+        # Quick views (no date arithmetic required)
+        ekctl today --calendar work
+        ekctl tomorrow --calendar work
+        ekctl next --calendar work --count 3
+
+        # Filter and combine — composes with --search, --availability, --format
+        ekctl today --calendar work,personal --availability busy --format csv
+
+        # Full CRUD
+        ekctl add event --calendar work --title "Meeting" \\
+          --start 2026-01-15T09:00:00Z --end 2026-01-15T10:00:00Z
         ekctl add reminder --list personal --title "Call mom"
 
       For more examples, see: https://github.com/schappim/ekctl#usage
@@ -39,8 +47,12 @@ class Ekctl < Formula
   end
 
   test do
-    assert_match "1.2.0", shell_output("#{bin}/ekctl --version")
+    assert_match "1.4.0", shell_output("#{bin}/ekctl --version")
     assert_match "calendars", shell_output("#{bin}/ekctl list --help")
+    assert_match "today", shell_output("#{bin}/ekctl --help")
+    assert_match "next", shell_output("#{bin}/ekctl --help")
     assert_match "alias", shell_output("#{bin}/ekctl --help")
+    # `--format` is on every output-producing command since 1.4.0
+    assert_match "--format", shell_output("#{bin}/ekctl list events --help")
   end
 end
