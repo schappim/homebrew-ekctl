@@ -6,11 +6,16 @@ class Ekctl < Formula
   license "MIT"
   head "https://github.com/schappim/ekctl.git", branch: "main"
 
-  depends_on xcode: ["14.0", :build]
-  depends_on :macos
+  # Builds with the Swift toolchain shipped in the Command Line Tools; a full
+  # Xcode.app is not required. macOS 13 (Ventura) is the real floor (EventKit
+  # APIs used + Swift 5.9), so express that directly instead of via Xcode.
+  depends_on macos: :ventura
 
   def install
     system "swift", "build", "-c", "release", "--disable-sandbox"
+    # Ad-hoc sign with the EventKit entitlements so Calendar/Reminders access works.
+    system "codesign", "--force", "--sign", "-",
+           "--entitlements", "ekctl.entitlements", ".build/release/ekctl"
     bin.install ".build/release/ekctl"
   end
 
