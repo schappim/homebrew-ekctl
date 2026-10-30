@@ -1,8 +1,8 @@
 class Ekctl < Formula
   desc "macOS CLI tool for managing Calendar events and Reminders via EventKit"
   homepage "https://github.com/schappim/ekctl"
-  url "https://github.com/schappim/ekctl/archive/refs/tags/v1.6.0.tar.gz"
-  sha256 "91242b4f7abb7949af98690f842ad8f02c001f0b26d69ea0a4fb2173eb70e4d9"
+  url "https://github.com/schappim/ekctl/archive/refs/tags/v1.9.0.tar.gz"
+  sha256 "9930297868f192c15d39a52315221683cb923dd497cf4861009471f725138422"
   license "MIT"
   head "https://github.com/schappim/ekctl.git", branch: "main"
 
@@ -47,7 +47,7 @@ class Ekctl < Formula
   end
 
   test do
-    assert_match "1.6.0", shell_output("#{bin}/ekctl --version")
+    assert_match version.to_s, shell_output("#{bin}/ekctl --version")
     assert_match "calendars", shell_output("#{bin}/ekctl list --help")
     assert_match "today", shell_output("#{bin}/ekctl --help")
     assert_match "next", shell_output("#{bin}/ekctl --help")
@@ -59,5 +59,10 @@ class Ekctl < Formula
     assert_match "update", shell_output("#{bin}/ekctl --help")
     assert_match "--notes", shell_output("#{bin}/ekctl update event --help")
     assert_match "--alarms", shell_output("#{bin}/ekctl update event --help")
+    # `free` (open-slot search) arrived in 1.7.0
+    assert_match "free", shell_output("#{bin}/ekctl --help")
+    # 1.9.0 addresses one occurrence of a recurring event instead of the first
+    assert_match "--span", shell_output("#{bin}/ekctl update event --help")
+    assert_match "--occurrence", shell_output("#{bin}/ekctl update event --help")
   end
 end
